@@ -46,6 +46,14 @@ import createNewStore from 'kit/lib/redux';
 
 // ----------------------
 
+// Populate keys on window with data from SSR if present.
+if (document.getElementById('REACTQL_WINDOW_KEYS')) {
+  const windowKeys = JSON.parse(document.getElementById('REACTQL_WINDOW_KEYS').innerHTML);
+  windowKeys.forEach(key => {
+    window[key] = JSON.parse(document.getElementById(`REACTQL.${key}`).innerHTML);
+  });
+}
+
 // Create a new browser Apollo client
 const client = browserClient();
 

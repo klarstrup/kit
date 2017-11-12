@@ -39,12 +39,10 @@ const Html = ({ helmet, scripts, window, css, children }) => (
           }} />
       ))}
       <script
+        type="application/json"
+        id="REACTQL_WINDOW_KEYS"
         dangerouslySetInnerHTML={{
-          __html: Object.keys(window).reduce(
-            (out, key) =>
-              (out += `window['${key}'] = JSON.parse(document.getElementById('${idPrefix}${key}').innerHTML);`),
-            '',
-          ),
+          __html: JSON.stringify(Object.keys(window)),
         }} />
       {scripts.map(src => <script key={src} src={src} />)}
     </body>
