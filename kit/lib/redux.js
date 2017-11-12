@@ -23,7 +23,7 @@ import config from 'kit/config';
 // ----------------------
 
 // Detect if we're both in the browser, AND we have dehydrated state
-const hasState = !!(!SERVER && window.__STATE__);
+const hasState = () => !!(!SERVER && window.__STATE__);
 
 // Helper function that 'unwinds' the `config.reducers` Map, and provides
 // the `reducer` function or `initialState` (wrapped in `seamless-immutable`)
@@ -55,7 +55,7 @@ function unwind(reducer = true) {
   // If not, we're looking for the state -- so let's map it and wrap the
   // object in `seamless-immutable`, to avoid side-effects with Redux
   return Object.assign({}, ...Object.keys(r).map(key => ({
-    [key]: Immutable((hasState && (window.__STATE__[key])) || r[key]),
+    [key]: Immutable((hasState() && (window.__STATE__[key])) || r[key]),
   })));
 }
 
@@ -69,7 +69,7 @@ export default function createNewStore(apolloClient) {
     }),
     // Initial server state, provided by the server.
     {
-      apollo: (hasState && window.__STATE__.apollo) || {},
+      apollo: (hasState() && window.__STATE__.apollo) || {},
       ...unwind(false),
     },
     compose(
